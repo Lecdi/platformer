@@ -1,0 +1,35 @@
+#include "resource.h"
+
+@declare_manifest@
+
+@declare_icon@
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION @P_VERSION_MAJOR@,@P_VERSION_MINOR@,@P_VERSION_PATCH@,0
+PRODUCTVERSION @P_VERSION_MAJOR@,@P_VERSION_MINOR@,@P_VERSION_PATCH@,0
+FILEFLAGSMASK 0x3fL
+FILEFLAGS 0x0L
+FILEOS 0x40004L
+FILETYPE 0x1L
+FILESUBTYPE 0x0L
+
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "FileVersion", "@P_VERSION_STRING@"
+            VALUE "ProductVersion", "@P_VERSION_STRING@"
+            VALUE "FileDescription", "@P_DESCRIPTION@"
+            VALUE "InternalName", "@name@"
+            VALUE "OriginalFileName", "@name@.exe"
+            @display_name_value@
+            @vendor_value@
+        END
+    END
+    
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END

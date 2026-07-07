@@ -1,0 +1,23 @@
+# Build directories
+build/
+build-*/
+cmake-build*/
+
+# CMake generated
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# IDEs
+.vscode/
+.idea/
+
+# CMake user config
+CMakeUserPresets.json
+
+# OS files
+.DS_Store
+.AppleDouble
+.LSOverride

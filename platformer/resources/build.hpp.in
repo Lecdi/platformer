@@ -1,0 +1,22 @@
+#pragma once
+
+#include <string_view>
+
+namespace platformer
+{
+    namespace build
+    {
+        enum class BuildType
+        {
+            DEBUG,
+            RELEASE,
+            RELWITHDEBINFO,
+            MINSIZEREL,
+            NONE_OR_OTHER
+        }
+        
+        inline constexpr BuildType build_type = BuildType::@_platformer_build_type@;
+        
+        inline constexpr std::string_view platform = "@PLATFORM@";
+    }
+}

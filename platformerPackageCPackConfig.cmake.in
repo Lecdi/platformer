@@ -1,0 +1,20 @@
+set(CPACK_GENERATOR "ZIP")  
+
+set(CPACK_INSTALL_CMAKE_PROJECTS
+    "@CMAKE_CURRENT_BINARY_DIR@;platformer;ALL;/"
+)
+
+set(CPACK_CMAKE_GENERATOR "@CMAKE_GENERATOR@")
+
+set(CPACK_COMPONENTS_ALL "platformer")
+
+set(CPACK_PACKAGE_FILE_NAME "platformer-@PROJECT_VERSION@")
+
+set(CPACK_PACKAGE_DIRECTORY "@CMAKE_CURRENT_BINARY_DIR@/dist")
+
+set(CPACK_PACKAGE_NAME "platformer")
+
+set(CPACK_PACKAGE_VERSION "@PROJECT_VERSION@")
+
+set(CPACK_PACKAGE_DESCRIPTION "Platformer: a pure CMake module which simplifies creating cross-platform C++ projects")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Platformer: a pure CMake module which simplifies creating cross-platform C++ projects")

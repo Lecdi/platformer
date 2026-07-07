@@ -1,0 +1,7 @@
+@PACKAGE_INIT@
+
+option(PLATFORMER_INCLUDE_AUTOMATICALLY "Automatically include platformer.cmake" ON)
+
+if(PLATFORMER_INCLUDE_AUTOMATICALLY)
+    include("${CMAKE_CURRENT_LIST_DIR}/platformer/platformer.cmake")
+endif()

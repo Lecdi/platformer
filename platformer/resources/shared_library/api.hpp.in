@@ -1,0 +1,5 @@
+#ifdef @name_upper@_BUILD
+#define @name_upper@_API @P_SHAREDLIB_EXPORT_CODE@
+#else
+#define @name_upper@_API @P_SHAREDLIB_IMPORT_CODE@
+#endif

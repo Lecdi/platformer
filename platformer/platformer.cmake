@@ -556,15 +556,10 @@ function(platformer_generate_cmake_package name)
     platformer_get_package_properties("${name}" P
         ${PLATFORMER_CMAKE_PACKAGE_PROPERTIES}
     )
-    if(NOT P_OMIT_TARGETS)
-        install(
-            TARGETS ${P_TARGETS}
-            EXPORT "${P_EXPORT_NAME}"
-            RUNTIME DESTINATION "bin"
-            ARCHIVE DESTINATION "lib"
-            LIBRARY DESTINATION "lib"
-            COMPONENT "${P_COMPONENT}"
-        )
+    if(P_OMIT_TARGETS)
+        set(include_targets_file_code "include(\"$${CMAKE_CURRENT_LIST_DIR}/${name}Targets.cmake\")")
+    else()
+        set(include_targets_file_code "")
     endif()
     set(package_config_configured_location "${CMAKE_CURRENT_BINARY_DIR}/configured/packages/${name}")
     set(package_config_install_location "lib/cmake/${name}")
@@ -577,27 +572,12 @@ function(platformer_generate_cmake_package name)
         "${package_config_configured_location}/${name}ConfigVersion.cmake"
         VERSION "${P_VERSION_STRING}" COMPATIBILITY "${P_VERSION_COMPATIBILITY}"
     )
-    if(NOT P_OMIT_CONFIG_FILES)
-        install(
-            FILES
-                "${package_config_configured_location}/${name}Config.cmake"
-                "${package_config_configured_location}/${name}ConfigVersion.cmake"
-            DESTINATION "${package_config_install_location}"
-            COMPONENT "${P_COMPONENT}"
-        )
-        install(
-            EXPORT "${P_EXPORT_NAME}"
-            FILE "${name}Targets.cmake"
-            NAMESPACE "${P_NAMESPACE}::"
-            DESTINATION "${package_config_install_location}"
-            COMPONENT "${P_COMPONENT}"
-        )
-    endif()
     foreach(target IN LISTS P_TARGETS)
         platformer_get_target_properties("${target}" TP
             TARGET_TYPE
             PUBLIC_INCLUDE_DIRS
         )
+        set(file_set_args "")
         if(TP_TARGET_TYPE STREQUAL "LIBRARY")
             foreach(dir IN LISTS TP_PUBLIC_INCLUDE_DIRS)
                 install(
@@ -606,7 +586,7 @@ function(platformer_generate_cmake_package name)
                     COMPONENT "${P_COMPONENT}"
                 )
             endforeach()
-            if(NOT P_OMIT_FILE_SETS AND NOT P_OMIT_TARGETS)
+            if(NOT P_OMIT_FILE_SETS)
                 get_target_property(header_sets "${target}" INTERFACE_HEADER_SETS)
                 if(NOT header_sets)
                     set(header_sets "")
@@ -616,14 +596,43 @@ function(platformer_generate_cmake_package name)
                     set(module_sets "")
                 endif()
                 foreach(file_set IN LISTS header_sets module_sets)
-                    install(TARGETS "${target}" FILE_SET "${file_set}" COMPONENT "${P_COMPONENT}")
+                    list(APPEND file_set_args FILE_SET "${file_set}")
                 endforeach()
             endif()
             if(NOT P_NO_ALIASES)
                 add_library("${P_NAMESPACE}::${target}" ALIAS "${target}")
             endif()
         endif()
+        if(NOT P_OMIT_TARGETS)
+            install(
+                TARGETS "${target}"
+                EXPORT "${P_EXPORT_NAME}"
+                RUNTIME DESTINATION "bin"
+                ARCHIVE DESTINATION "lib"
+                LIBRARY DESTINATION "lib"
+                ${file_set_args}
+                COMPONENT "${P_COMPONENT}"
+            )
+        endif()
     endforeach()
+    if(NOT P_OMIT_CONFIG_FILES)
+        install(
+            FILES
+                "${package_config_configured_location}/${name}Config.cmake"
+                "${package_config_configured_location}/${name}ConfigVersion.cmake"
+            DESTINATION "${package_config_install_location}"
+            COMPONENT "${P_COMPONENT}"
+        )
+        if(NOT P_OMIT_TARGETS)
+            install(
+                EXPORT "${P_EXPORT_NAME}"
+                FILE "${name}Targets.cmake"
+                NAMESPACE "${P_NAMESPACE}::"
+                DESTINATION "${package_config_install_location}"
+                COMPONENT "${P_COMPONENT}"
+            )
+        endif()
+    endif()
     set(cpack_install_code
         "set(CPACK_INSTALL_CMAKE_PROJECTS \"${CMAKE_CURRENT_BINARY_DIR};${PROJECT_NAME};ALL;/\")"
     )

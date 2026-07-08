@@ -557,7 +557,7 @@ function(platformer_generate_cmake_package name)
         ${PLATFORMER_CMAKE_PACKAGE_PROPERTIES}
     )
     if(NOT P_OMIT_TARGETS)
-        set(include_targets_file_code "include(\"$${CMAKE_CURRENT_LIST_DIR}/${name}Targets.cmake\")")
+        set(include_targets_file_code "include(\"\${CMAKE_CURRENT_LIST_DIR}/${name}Targets.cmake\")")
     else()
         set(include_targets_file_code "")
     endif()

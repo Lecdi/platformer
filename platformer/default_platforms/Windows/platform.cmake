@@ -260,13 +260,13 @@ function(platform_generate_application_package name)
         else()
             install(
                 TARGETS ${P_TARGETS}
+                RUNTIME_DEPENDENCIES
+                PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-"
+                POST_EXCLUDE_REGEXES ".*system32.*"
                 RUNTIME DESTINATION "bin"
                 ARCHIVE DESTINATION "lib"
                 LIBRARY DESTINATION "lib"
                 COMPONENT "${P_COMPONENT}"
-                RUNTIME_DEPENDENCIES
-                PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-"
-                POST_EXCLUDE_REGEXES ".*system32.*"
             )
         endif()
     endif()
